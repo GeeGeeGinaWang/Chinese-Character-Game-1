@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>汉字侦探社 - 解密验证游戏</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+        }
+        
+        .game-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .story-panel {
+            flex: 1;
+            min-width: 300px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .game-panel {
+            flex: 2;
+            min-width: 400px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .chapter-title {
+            background: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+        
+        .story-content {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            min-height: 150px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            line-height: 1.6;
+        }
+        
+        .character-display {
+            font-size: 120px;
+            text-align: center;
+            margin: 20px 0;
+            color: #2c3e50;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .character-info {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .pinyin {
+            font-size: 1.5rem;
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+        
+        .meaning {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .example {
+            font-size: 1rem;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .input-area {
+            margin-top: 20px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        button:hover {
+            background: #2980b9;
+        }
+        
+        .btn-secondary {
+            background: #2ecc71;
+        }
+        
+        .btn-secondary:hover {
+            background: #27ae60;
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #2ecc71;
+            width: 30%;
+            transition: width 0.5s;
+        }
+        
+        .hint {
+            background: #fff9c4;
+            border-left: 4px solid #ffd54f;
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+            font-size: 0.9rem;
+        }
+        
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .character-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px 5px;
+            text-align: center;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .character-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+        }
+        
+        .character-card .char {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .character-card .pinyin {
+            font-size: 0.8rem;
+            color: #e74c3c;
+        }
+        
+        .success {
+            color: #27ae60;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: #d5f4e6;
+            border-radius: 5px;
+        }
+        
+        .error {
+            color: #e74c3c;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: #fadbd8;
+            border-radius: 5px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .npc-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #3498db;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .story-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .story-controls button {
+            flex: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .game-area {
+                flex-direction: column;
+            }
+            
+            .character-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .character-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .character-display {
+                font-size: 80px;
+                height: 100px;
+            }
+        }
+        
+        .decoration {
+            position: absolute;
+            opacity: 0.1;
+            font-size: 120px;
+            z-index: 0;
+        }
+        
+        .dec-1 {
+            top: 10%;
+            left: 5%;
+        }
+        
+        .dec-2 {
+            top: 60%;
+            right: 5%;
+        }
+        
+        .dec-3 {
+            bottom: 10%;
+            left: 10%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>汉字侦探社</h1>
+        <p class="subtitle">通过故事解密学习汉字</p>
+    </header>
+    
+    <div class="container">
+        <div class="decoration dec-1">汉</div>
+        <div class="decoration dec-2">字</div>
+        <div class="decoration dec-3">学</div>
+        
+        <div class="chapter-title">第一章：初入侦探社</div>
+        
+        <div class="game-area">
+            <div class="story-panel">
+                <div class="npc-image">社</div>
+                <div class="story-content">
+                    <p>欢迎来到汉字侦探社！我是社长李明。</p>
+                    <p>我们侦探社专门解决与汉字相关的谜题。最近我们接到很多案件，但人手不足。</p>
+                    <p>作为新成员，你需要先掌握一些基础汉字。让我们从最简单的开始吧！</p>
+                    <p><strong>任务：</strong> 学习5个基础汉字，通过入门测试。</p>
+                </div>
+                
+                <div class="progress-container">
+                    <div>故事进度</div>
+                    <div class="progress-bar">
+                        <div class="progress" id="story-progress"></div>
+                    </div>
+                    <div class="stats">
+                        <div>章节: <span id="chapter-num">1</span>/6</div>
+                        <div>任务: <span id="task-progress">1</span>/5</div>
+                    </div>
+                </div>
+                
+                <div class="story-controls">
+                    <button id="prev-btn">上一任务</button>
+                    <button id="next-btn" class="btn-secondary">下一任务</button>
+                </div>
+            </div>
+            
+            <div class="game-panel">
+                <div class="character-display" id="current-character">你</div>
+                
+                <div class="character-info">
+                    <div class="pinyin" id="pinyin">nǐ</div>
+                    <div class="meaning" id="meaning">你 (you) - 第二人称代词</div>
+                    <div class="example" id="example">例句: 你好！(Nǐ hǎo! - Hello!)</div>
+                </div>
+                
+                <div class="hint">
+                    <strong>侦探提示:</strong> 这个汉字表示第二人称，用于称呼对方。在中文中，与"我"(wǒ)相对。
+                </div>
+                
+                <div class="input-area">
+                    <input type="text" id="answer-input" placeholder="请输入这个汉字的意思...">
+                    <button id="submit-btn">提交答案</button>
+                    <div id="result-message"></div>
+                </div>
+                
+                <div class="progress-container">
+                    <div>学习进度</div>
+                    <div class="progress-bar">
+                        <div class="progress" id="learning-progress"></div>
+                    </div>
+                    <div class="stats">
+                        <div>已学习: <span id="learned-count">1</span>/30</div>
+                        <div>正确率: <span id="accuracy">100%</span></div>
+                    </div>
+                </div>
+                
+                <h3>已解锁汉字</h3>
+                <div class="character-grid" id="character-grid">
+                    <!-- 汉字卡片将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 故事章节数据
+        const storyChapters = [
+            {
+                title: "第一章：初入侦探社",
+                npc: "社",
+                story: "欢迎来到汉字侦探社！我是社长李明。我们侦探社专门解决与汉字相关的谜题。最近我们接到很多案件，但人手不足。作为新成员，你需要先掌握一些基础汉字。让我们从最简单的开始吧！",
+                task: "学习5个基础汉字，通过入门测试。",
+                characters: [0, 1, 2, 3, 4] // 字符索引
+            },
+            {
+                title: "第二章：失踪的朋友",
+                npc: "学",
+                story: "大学生小李来找我们帮忙，他的朋友小王昨天突然失踪了。小王只留下了一张便条，但上面的字迹有些模糊。我们需要破解便条上的汉字，找出小王的去向。",
+                task: "解密便条，找到小王的下落。",
+                characters: [5, 6, 7, 8, 9]
+            },
+            {
+                title: "第三章：神秘礼物",
+                npc: "礼",
+                story: "今天是玛丽的生日，她收到了一个匿名礼物。礼物盒上有一串汉字谜题，只有解开谜题才能知道送礼人是谁。玛丽很想知道是谁送的礼物，你能帮助她吗？",
+                task: "解开礼物上的汉字谜题。",
+                characters: [10, 11, 12, 13, 14]
+            },
+            {
+                title: "第四章：时间谜题",
+                npc: "时",
+                story: "一位外国游客在火车站迷路了，他需要赶上下午3点的火车，但看不懂中文时刻表。我们需要帮他理解时间相关的汉字，让他能够准时上车。",
+                task: "帮助游客看懂时刻表。",
+                characters: [15, 16, 17, 18, 19]
+            },
+            {
+                title: "第五章：家庭相册",
+                npc: "家",
+                story: "一位老奶奶想整理她的家庭相册，但相册上的汉字标注已经模糊不清。她希望我们帮助识别这些汉字，找回珍贵的家庭记忆。",
+                task: "识别相册中的家庭成员称呼。",
+                characters: [20, 21, 22, 23, 24]
+            },
+            {
+                title: "第六章：终极挑战",
+                npc: "侦",
+                story: "恭喜你！你已经掌握了大量汉字知识。现在，社长要给你最后的考验。通过这个测试，你将成为汉字侦探社的正式成员！",
+                task: "通过最终测试，成为正式侦探。",
+                characters: [25, 26, 27, 28, 29]
+            }
+        ];
+
+        // 汉字数据
+        const characters = [
+            { char: '你', pinyin: 'nǐ', meaning: '你 (you) - 第二人称代词', example: '例句: 你好！(Nǐ hǎo! - Hello!)' },
+            { char: '好', pinyin: 'hǎo', meaning: '好 (good) - 表示良好、赞同', example: '例句: 你好！(Nǐ hǎo! - Hello!)' },
+            { char: '我', pinyin: 'wǒ', meaning: '我 (I/me) - 第一人称代词', example: '例句: 我叫小明。(Wǒ jiào Xiǎomíng. - My name is Xiaoming.)' },
+            { char: '叫', pinyin: 'jiào', meaning: '叫 (to call) - 称呼或命名', example: '例句: 你叫什么名字？(Nǐ jiào shénme míngzì? - What is your name?)' },
+            { char: '是', pinyin: 'shì', meaning: '是 (to be) - 表示肯定或确认', example: '例句: 我是学生。(Wǒ shì xuéshēng. - I am a student.)' },
+            { char: '人', pinyin: 'rén', meaning: '人 (person) - 人类', example: '例句: 中国人 (Zhōngguó rén - Chinese person)' },
+            { char: '他', pinyin: 'tā', meaning: '他 (he) - 第三人称男性', example: '例句: 他是老师。(Tā shì lǎoshī. - He is a teacher.)' },
+            { char: '她', pinyin: 'tā', meaning: '她 (she) - 第三人称女性', example: '例句: 她是学生。(Tā shì xuéshēng. - She is a student.)' },
+            { char: '们', pinyin: 'men', meaning: '们 (plural marker) - 表示复数', example: '例句: 我们 (wǒmen - we)' },
+            { char: '老师', pinyin: 'lǎoshī', meaning: '老师 (teacher) - 教师', example: '例句: 张老师 (Zhāng lǎoshī - Teacher Zhang)' },
+            { char: '生日', pinyin: 'shēngrì', meaning: '生日 (birthday) - 出生日期', example: '例句: 生日快乐！(Shēngrì kuàilè! - Happy birthday!)' },
+            { char: '快乐', pinyin: 'kuàilè', meaning: '快乐 (happy) - 愉快、高兴', example: '例句: 生日快乐！(Shēngrì kuàilè! - Happy birthday!)' },
+            { char: '礼物', pinyin: 'lǐwù', meaning: '礼物 (gift) - 赠送的物品', example: '例句: 这是给你的礼物。(Zhè shì gěi nǐ de lǐwù. - This is a gift for you.)' },
+            { char: '谢谢', pinyin: 'xièxie', meaning: '谢谢 (thank you) - 表示感谢', example: '例句: 谢谢你的礼物。(Xièxie nǐ de lǐwù. - Thank you for your gift.)' },
+            { char: '送', pinyin: 'sòng', meaning: '送 (to give) - 赠送', example: '例句: 我送你礼物。(Wǒ sòng nǐ lǐwù. - I give you a gift.)' },
+            { char: '月', pinyin: 'yuè', meaning: '月 (month) - 月份', example: '例句: 一月 (yī yuè - January)' },
+            { char: '号', pinyin: 'hào', meaning: '号 (date) - 日期', example: '例句: 五月一号 (wǔ yuè yī hào - May 1st)' },
+            { char: '星期', pinyin: 'xīngqī', meaning: '星期 (week) - 周', example: '例句: 星期一 (xīngqī yī - Monday)' },
+            { char: '点', pinyin: 'diǎn', meaning: '点 (o clock) - 钟点', example: '例句: 三点 (sān diǎn - 3 o clock)' },
+            { char: '分', pinyin: 'fēn', meaning: '分 (minute) - 分钟', example: '例句: 三点十分 (sān diǎn shí fēn - 3:10)' },
+            { char: '爸爸', pinyin: 'bàba', meaning: '爸爸 (dad) - 父亲', example: '例句: 我爸爸 (wǒ bàba - my dad)' },
+            { char: '妈妈', pinyin: 'māma', meaning: '妈妈 (mom) - 母亲', example: '例句: 我妈妈 (wǒ māma - my mom)' },
+            { char: '哥哥', pinyin: 'gēge', meaning: '哥哥 (older brother) - 兄', example: '例句: 我哥哥 (wǒ gēge - my older brother)' },
+            { char: '姐姐', pinyin: 'jiějie', meaning: '姐姐 (older sister) - 姐', example: '例句: 我姐姐 (wǒ jiějie - my older sister)' },
+            { char: '弟弟', pinyin: 'dìdi', meaning: '弟弟 (younger brother) - 弟', example: '例句: 我弟弟 (wǒ dìdi - my younger brother)' },
+            { char: '学习', pinyin: 'xuéxí', meaning: '学习 (to study) - 学习', example: '例句: 学习汉语 (xuéxí Hànyǔ - study Chinese)' },
+            { char: '汉语', pinyin: 'Hànyǔ', meaning: '汉语 (Chinese language) - 中文', example: '例句: 学习汉语 (xuéxí Hànyǔ - study Chinese)' },
+            { char: '朋友', pinyin: 'péngyǒu', meaning: '朋友 (friend) - 友人', example: '例句: 好朋友 (hǎo péngyǒu - good friend)' },
+            { char: '名字', pinyin: 'míngzì', meaning: '名字 (name) - 姓名', example: '例句: 你叫什么名字？(Nǐ jiào shénme míngzì? - What is your name?)' },
+            { char: '今天', pinyin: 'jīntiān', meaning: '今天 (today) - 今日', example: '例句: 今天很好。(Jīntiān hěn hǎo. - Today is very good.)' }
+        ];
+
+        // 游戏状态
+        let currentChapter = 0;
+        let currentTask = 0;
+        let learnedCharacters = [];
+        let correctAnswers = 0;
+        let totalAttempts = 0;
+
+        // DOM元素
+        const chapterTitleEl = document.querySelector('.chapter-title');
+        const npcImageEl = document.querySelector('.npc-image');
+        const storyContentEl = document.querySelector('.story-content');
+        const currentCharacterEl = document.getElementById('current-character');
+        const pinyinEl = document.getElementById('pinyin');
+        const meaningEl = document.getElementById('meaning');
+        const exampleEl = document.getElementById('example');
+        const answerInputEl = document.getElementById('answer-input');
+        const submitBtn = document.getElementById('submit-btn');
+        const resultMessageEl = document.getElementById('result-message');
+        const storyProgressEl = document.getElementById('story-progress');
+        const learningProgressEl = document.getElementById('learning-progress');
+        const chapterNumEl = document.getElementById('chapter-num');
+        const taskProgressEl = document.getElementById('task-progress');
+        const learnedCountEl = document.getElementById('learned-count');
+        const accuracyEl = document.getElementById('accuracy');
+        const characterGridEl = document.getElementById('character-grid');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        // 初始化游戏
+        function initGame() {
+            displayChapter(currentChapter);
+            displayTask(currentTask);
+            updateProgress();
+            renderCharacterGrid();
+            
+            // 添加事件监听器
+            submitBtn.addEventListener('click', checkAnswer);
+            answerInputEl.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkAnswer();
+                }
+            });
+            
+            prevBtn.addEventListener('click', prevTask);
+            nextBtn.addEventListener('click', nextTask);
+        }
+
+        // 显示当前章节
+        function displayChapter(chapterIndex) {
+            const chapter = storyChapters[chapterIndex];
+            chapterTitleEl.textContent = chapter.title;
+            npcImageEl.textContent = chapter.npc;
+            
+            // 更新故事内容
+            let storyHTML = `<p>${chapter.story}</p>`;
+            storyHTML += `<p><strong>任务：</strong> ${chapter.task}</p>`;
+            storyContentEl.innerHTML = storyHTML;
+            
+            // 更新章节信息
+            chapterNumEl.textContent = chapterIndex + 1;
+        }
+
+        // 显示当前任务
+        function displayTask(taskIndex) {
+            const chapter = storyChapters[currentChapter];
+            if (taskIndex >= 0 && taskIndex < chapter.characters.length) {
+                const characterIndex = chapter.characters[taskIndex];
+                const character = characters[characterIndex];
+                
+                currentCharacterEl.textContent = character.char;
+                pinyinEl.textContent = character.pinyin;
+                meaningEl.textContent = character.meaning;
+                exampleEl.textContent = character.example;
+                
+                // 更新任务进度
+                taskProgressEl.textContent = taskIndex + 1;
+                
+                // 清空输入和结果
+                answerInputEl.value = '';
+                resultMessageEl.textContent = '';
+                resultMessageEl.className = '';
+            }
+        }
+
+        // 检查答案
+        function checkAnswer() {
+            const userAnswer = answerInputEl.value.trim().toLowerCase();
+            const chapter = storyChapters[currentChapter];
+            const characterIndex = chapter.characters[currentTask];
+            const character = characters[characterIndex];
+            
+            // 简单的答案验证 - 在实际应用中应该更复杂
+            const correctMeaning = character.meaning.toLowerCase();
+            let isCorrect = false;
+            
+            // 检查答案是否包含关键词
+            if (correctMeaning.includes('you') && (userAnswer.includes('you') || userAnswer.includes('你'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('good') && (userAnswer.includes('good') || userAnswer.includes('好'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('i') && (userAnswer.includes('i') || userAnswer.includes('me') || userAnswer.includes('我'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('call') && (userAnswer.includes('call') || userAnswer.includes('叫'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('to be') && (userAnswer.includes('be') || userAnswer.includes('是'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('person') && (userAnswer.includes('person') || userAnswer.includes('人'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('he') && (userAnswer.includes('he') || userAnswer.includes('他'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('she') && (userAnswer.includes('she') || userAnswer.includes('她'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('plural') && (userAnswer.includes('plural') || userAnswer.includes('们'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('teacher') && (userAnswer.includes('teacher') || userAnswer.includes('老师'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('birthday') && (userAnswer.includes('birthday') || userAnswer.includes('生日'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('happy') && (userAnswer.includes('happy') || userAnswer.includes('快乐'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('gift') && (userAnswer.includes('gift') || userAnswer.includes('礼物'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('thank') && (userAnswer.includes('thank') || userAnswer.includes('谢谢'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('give') && (userAnswer.includes('give') || userAnswer.includes('送'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('month') && (userAnswer.includes('month') || userAnswer.includes('月'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('date') && (userAnswer.includes('date') || userAnswer.includes('号'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('week') && (userAnswer.includes('week') || userAnswer.includes('星期'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('o clock') && (userAnswer.includes('clock') || userAnswer.includes('点'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('minute') && (userAnswer.includes('minute') || userAnswer.includes('分'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('dad') && (userAnswer.includes('dad') || userAnswer.includes('爸爸'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('mom') && (userAnswer.includes('mom') || userAnswer.includes('妈妈'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('older brother') && (userAnswer.includes('brother') || userAnswer.includes('哥哥'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('older sister') && (userAnswer.includes('sister') || userAnswer.includes('姐姐'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('younger brother') && (userAnswer.includes('brother') || userAnswer.includes('弟弟'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('study') && (userAnswer.includes('study') || userAnswer.includes('学习'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('chinese') && (userAnswer.includes('chinese') || userAnswer.includes('汉语'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('friend') && (userAnswer.includes('friend') || userAnswer.includes('朋友'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('name') && (userAnswer.includes('name') || userAnswer.includes('名字'))) {
+                isCorrect = true;
+            } else if (correctMeaning.includes('today') && (userAnswer.includes('today') || userAnswer.includes('今天'))) {
+                isCorrect = true;
+            }
+            
+            totalAttempts++;
+            if (isCorrect) {
+                correctAnswers++;
+                resultMessageEl.textContent = '正确！太棒了，侦探！';
+                resultMessageEl.className = 'success';
+                
+                // 添加到已学习列表（如果不重复）
+                if (!learnedCharacters.includes(characterIndex)) {
+                    learnedCharacters.push(characterIndex);
+                }
+                
+                // 自动进入下一个任务
+                setTimeout(nextTask, 1500);
+            } else {
+                resultMessageEl.textContent = '再想想看，这个答案不太对。';
+                resultMessageEl.className = 'error';
+            }
+            
+            updateProgress();
+        }
+
+        // 下一个任务
+        function nextTask() {
+            const chapter = storyChapters[currentChapter];
+            
+            if (currentTask < chapter.characters.length - 1) {
+                currentTask++;
+                displayTask(currentTask);
+            } else if (currentChapter < storyChapters.length - 1) {
+                // 进入下一章节
+                currentChapter++;
+                currentTask = 0;
+                displayChapter(currentChapter);
+                displayTask(currentTask);
+            } else {
+                // 游戏结束
+                resultMessageEl.textContent = '恭喜！你已完成所有章节，成为一名优秀的汉字侦探！';
+                resultMessageEl.className = 'success';
+                nextBtn.disabled = true;
+            }
+            
+            updateProgress();
+        }
+
+        // 上一个任务
+        function prevTask() {
+            if (currentTask > 0) {
+                currentTask--;
+                displayTask(currentTask);
+            } else if (currentChapter > 0) {
+                // 回到上一章节
+                currentChapter--;
+                const chapter = storyChapters[currentChapter];
+                currentTask = chapter.characters.length - 1;
+                displayChapter(currentChapter);
+                displayTask(currentTask);
+            }
+            
+            updateProgress();
+        }
+
+        // 更新进度条
+        function updateProgress() {
+            // 故事进度
+            const storyProgress = (currentChapter / (storyChapters.length - 1)) * 100;
+            storyProgressEl.style.width = `${storyProgress}%`;
+            
+            // 学习进度
+            const learningProgress = (learnedCharacters.length / characters.length) * 100;
+            learningProgressEl.style.width = `${learningProgress}%`;
+            
+            // 更新统计
+            learnedCountEl.textContent = learnedCharacters.length;
+            const accuracy = totalAttempts > 0 ? Math.round((correctAnswers / totalAttempts) * 100) : 100;
+            accuracyEl.textContent = `${accuracy}%`;
+            
+            // 重新渲染汉字网格
+            renderCharacterGrid();
+        }
+
+        // 渲染汉字网格
+        function renderCharacterGrid() {
+            characterGridEl.innerHTML = '';
+            
+            learnedCharacters.forEach(index => {
+                const character = characters[index];
+                const card = document.createElement('div');
+                card.className = 'character-card';
+                card.innerHTML = `
+                    <div class="char">${character.char}</div>
+                    <div class="pinyin">${character.pinyin}</div>
+                `;
+                characterGridEl.appendChild(card);
+            });
+        }
+
+        // 初始化游戏
+        initGame();
+    </script>
+</body>
+</html>
