@@ -727,50 +727,13 @@
             }
         ];
 
-        // Character data
-        const characters = [
-            { char: '你', pinyin: 'nǐ', meaning: 'You - Second person pronoun', example: 'Example: 你好！(Nǐ hǎo! - Hello!)' },
-            { char: '好', pinyin: 'hǎo', meaning: 'Good - Expresses positivity or agreement', example: 'Example: 你好！(Nǐ hǎo! - Hello!)' },
-            { char: '叫', pinyin: 'jiào', meaning: 'To call - Used for naming or addressing', example: 'Example: 你叫什么名字？(Nǐ jiào shénme míngzì? - What is your name?)' },
-            { char: '什么', pinyin: 'shénme', meaning: 'What - Question word', example: 'Example: 这是什么？(Zhè shì shénme? - What is this?)' },
-            { char: '名字', pinyin: 'míngzì', meaning: 'Name - Personal name', example: 'Example: 你叫什么名字？(Nǐ jiào shénme míngzì? - What is your name?)' },
-            { char: '是', pinyin: 'shì', meaning: 'To be - Expresses affirmation or confirmation', example: 'Example: 我是学生。(Wǒ shì xuéshēng. - I am a student.)' },
-            { char: '学', pinyin: 'xué', meaning: 'To learn - Study', example: 'Example: 学习 (xuéxí - to study)' },
-            { char: '生', pinyin: 'shēng', meaning: 'Life/Student - Life or student', example: 'Example: 学生 (xuéshēng - student)' },
-            { char: '家', pinyin: 'jiā', meaning: 'Home/Family - Home or family', example: 'Example: 我家 (wǒ jiā - my home)' },
-            { char: '有', pinyin: 'yǒu', meaning: 'To have - Possess or exist', example: 'Example: 我有书。(Wǒ yǒu shū. - I have a book.)' },
-            { char: '哥', pinyin: 'gē', meaning: 'Older brother - Elder brother', example: 'Example: 哥哥 (gēgē - older brother)' },
-            { char: '弟', pinyin: 'dì', meaning: 'Younger brother - Little brother', example: 'Example: 弟弟 (dìdi - younger brother)' },
-            { char: '姐', pinyin: 'jiě', meaning: 'Older sister - Elder sister', example: 'Example: 姐姐 (jiějie - older sister)' },
-            { char: '妹', pinyin: 'mèi', meaning: 'Younger sister - Little sister', example: 'Example: 妹妹 (mèimei - younger sister)' },
-            { char: '爸爸', pinyin: 'bàba', meaning: 'Dad - Father', example: 'Example: 我爸爸 (wǒ bàba - my dad)' },
-            { char: '做', pinyin: 'zuò', meaning: 'To do - Perform an action', example: 'Example: 做什么？(Zuò shénme? - Do what?)' },
-            { char: '工作', pinyin: 'gōngzuò', meaning: 'Work - Job or occupation', example: 'Example: 工作 (gōngzuò - work)' },
-            { char: '说', pinyin: 'shuō', meaning: 'To speak - Talk or say', example: 'Example: 说话 (shuōhuà - to speak)' },
-            { char: '汉', pinyin: 'hàn', meaning: 'Han - Chinese ethnicity', example: 'Example: 汉语 (Hànyǔ - Chinese language)' },
-            { char: '语', pinyin: 'yǔ', meaning: 'Language - Speech or language', example: 'Example: 汉语 (Hànyǔ - Chinese language)' },
-            { char: '我', pinyin: 'wǒ', meaning: 'I/Me - First person pronoun', example: 'Example: 我叫小明。(Wǒ jiào Xiǎomíng. - My name is Xiaoming.)' },
-            { char: '人', pinyin: 'rén', meaning: 'Person - Human being', example: 'Example: 中国人 (Zhōngguó rén - Chinese person)' },
-            { char: '老师', pinyin: 'lǎoshī', meaning: 'Teacher - Educator', example: 'Example: 张老师 (Zhāng lǎoshī - Teacher Zhang)' },
-            { char: '生日', pinyin: 'shēngrì', meaning: 'Birthday - Date of birth', example: 'Example: 生日快乐！(Shēngrì kuàilè! - Happy birthday!)' },
-            { char: '快乐', pinyin: 'kuàilè', meaning: 'Happy - Joyful, pleased', example: 'Example: 生日快乐！(Shēngrì kuàilè! - Happy birthday!)' },
-            { char: '礼物', pinyin: 'lǐwù', meaning: 'Gift - Present', example: 'Example: 这是给你的礼物。(Zhè shì gěi nǐ de lǐwù. - This is a gift for you.)' },
-            { char: '谢谢', pinyin: 'xièxie', meaning: 'Thank you - Expression of gratitude', example: 'Example: 谢谢你的礼物。(Xièxie nǐ de lǐwù. - Thank you for your gift.)' },
-            { char: '送', pinyin: 'sòng', meaning: 'To give - To present', example: 'Example: 我送你礼物。(Wǒ sòng nǐ lǐwù. - I give you a gift.)' },
-            { char: '月', pinyin: 'yuè', meaning: 'Month - Calendar month', example: 'Example: 一月 (yī yuè - January)' }
-        ];
-
         // Game state
-        let currentChapter = 0;
         let currentTask = 0;
         let learnedCharacters = [];
         let correctAnswers = 0;
         let totalAttempts = 0;
 
         // DOM elements
-        const chapterTitleEl = document.querySelector('.chapter-title');
-        const npcImageEl = document.querySelector('.npc-image');
-        const storyContentEl = document.querySelector('.story-content');
         const interviewContextEl = document.getElementById('interview-context');
         const currentQuestionEl = document.getElementById('current-question');
         const currentCharacterEl = document.getElementById('current-character');
@@ -782,7 +745,6 @@
         const resultMessageEl = document.getElementById('result-message');
         const storyProgressEl = document.getElementById('story-progress');
         const learningProgressEl = document.getElementById('learning-progress');
-        const chapterNumEl = document.getElementById('chapter-num');
         const taskProgressEl = document.getElementById('task-progress');
         const learnedCountEl = document.getElementById('learned-count');
         const accuracyEl = document.getElementById('accuracy');
@@ -794,7 +756,6 @@
 
         // Initialize game
         function initGame() {
-            displayChapter(currentChapter);
             displayTask(currentTask);
             updateProgress();
             renderCharacterGrid();
@@ -811,13 +772,196 @@
             nextBtn.addEventListener('click', nextTask);
         }
 
-        // Display current chapter
-        function displayChapter(chapterIndex) {
-            chapterTitleEl.textContent = "Chapter 1: The Detective Agency Interview";
-            npcImageEl.textContent = "社";
+        // Display current task
+        function displayTask(taskIndex) {
+            if (taskIndex >= 0 && taskIndex < interviewQuestions.length) {
+                const question = interviewQuestions[taskIndex];
+                
+                // Update question and context
+                currentQuestionEl.textContent = question.question;
+                interviewContextEl.textContent = question.context;
+                
+                // Update character display (show first character of the question)
+                currentCharacterEl.textContent = question.question.charAt(0);
+                
+                // Update character info
+                pinyinEl.textContent = question.pinyin;
+                meaningEl.textContent = question.meaning;
+                exampleEl.textContent = question.example;
+                
+                // Update hint
+                document.querySelector('.hint').innerHTML = `<strong>Interview Tip:</strong> ${question.hint}`;
+                
+                // Update task progress
+                taskProgressEl.textContent = taskIndex + 1;
+                
+                // Clear input and result
+                answerInputEl.value = '';
+                resultMessageEl.textContent = '';
+                resultMessageEl.className = '';
+                
+                // Focus on input
+                answerInputEl.focus();
+                
+                // Add characters to learned list
+                question.characters.forEach(charIndex => {
+                    if (!learnedCharacters.includes(charIndex)) {
+                        learnedCharacters.push(charIndex);
+                    }
+                });
+                
+                updateProgress();
+            }
+        }
+
+        // Check answer
+        function checkAnswer() {
+            const userAnswer = answerInputEl.value.trim().toLowerCase();
+            const question = interviewQuestions[currentTask];
             
-            // Update story content
-            let storyHTML = `<p>Welcome to the Chinese Character Detective Agency! I'm Director Li Ming.</p>`;
-            storyHTML += `<p>We're looking for new detectives who can solve mysteries using Chinese characters. To join our team, you need to pass this interview.</p>`;
-            storyHTML += `<p>I'll ask you some questions in Chinese. Try to understand and respond appropriately.</p>`;
-            storyHTML += `<
+            // Check if answer is correct
+            let isCorrect = false;
+            for (let correctAnswer of question.correctAnswers) {
+                if (userAnswer.includes(correctAnswer.toLowerCase())) {
+                    isCorrect = true;
+                    break;
+                }
+            }
+            
+            totalAttempts++;
+            if (isCorrect) {
+                correctAnswers++;
+                resultMessageEl.textContent = 'Correct! Excellent work, Detective!';
+                resultMessageEl.className = 'success';
+                
+                // Show celebration
+                showCelebration();
+                
+                // Automatically move to next question after 2 seconds
+                setTimeout(nextTask, 2000);
+            } else {
+                resultMessageEl.textContent = 'Try again. Remember the response pattern from the example.';
+                resultMessageEl.className = 'error';
+            }
+            
+            updateProgress();
+        }
+
+        // Show celebration
+        function showCelebration() {
+            celebrationEl.classList.add('active');
+            
+            // Hide celebration after 2 seconds
+            setTimeout(() => {
+                celebrationEl.classList.remove('active');
+            }, 2000);
+        }
+
+        // Next task
+        function nextTask() {
+            if (currentTask < interviewQuestions.length - 1) {
+                currentTask++;
+                displayTask(currentTask);
+            } else {
+                // All questions completed - show chapter complete celebration
+                showChapterComplete();
+            }
+            
+            updateProgress();
+        }
+
+        // Previous task
+        function prevTask() {
+            if (currentTask > 0) {
+                currentTask--;
+                displayTask(currentTask);
+            }
+            
+            updateProgress();
+        }
+
+        // Show chapter complete celebration
+        function showChapterComplete() {
+            chapterCompleteEl.classList.add('active');
+            
+            // Create fireworks effect
+            createFireworks();
+            
+            // Move to next chapter after 2 seconds
+            setTimeout(() => {
+                chapterCompleteEl.classList.remove('active');
+                // In a real implementation, you would load the next chapter here
+                alert("Congratulations! You've completed Chapter 1. In the full game, you would now proceed to Chapter 2: The Missing Friend.");
+            }, 2000);
+        }
+
+        // Create fireworks effect
+        function createFireworks() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            const container = chapterCompleteEl;
+            
+            for (let i = 0; i < 50; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                firework.style.left = Math.random() * 100 + 'vw';
+                firework.style.top = Math.random() * 100 + 'vh';
+                firework.style.setProperty('--x', (Math.random() * 40 - 20) + 'px');
+                firework.style.setProperty('--y', (Math.random() * 40 - 20) + 'px');
+                
+                container.appendChild(firework);
+                
+                // Remove firework after animation completes
+                setTimeout(() => {
+                    firework.remove();
+                }, 1500);
+            }
+        }
+
+        // Update progress
+        function updateProgress() {
+            // Story progress
+            const storyProgress = (currentTask / (interviewQuestions.length - 1)) * 100;
+            storyProgressEl.style.width = `${storyProgress}%`;
+            
+            // Learning progress
+            const learningProgress = (learnedCharacters.length / 30) * 100;
+            learningProgressEl.style.width = `${learningProgress}%`;
+            
+            // Update stats
+            learnedCountEl.textContent = learnedCharacters.length;
+            const accuracy = totalAttempts > 0 ? Math.round((correctAnswers / totalAttempts) * 100) : 100;
+            accuracyEl.textContent = `${accuracy}%`;
+            
+            // Re-render character grid
+            renderCharacterGrid();
+        }
+
+        // Render character grid
+        function renderCharacterGrid() {
+            characterGridEl.innerHTML = '';
+            
+            // For now, just show the first few characters as an example
+            const charactersToShow = learnedCharacters.slice(0, 10);
+            
+            charactersToShow.forEach(index => {
+                const character = {
+                    char: interviewQuestions[0].question.charAt(0), // Simplified for demo
+                    pinyin: "nǐ" // Simplified for demo
+                };
+                
+                const card = document.createElement('div');
+                card.className = 'character-card';
+                card.innerHTML = `
+                    <div class="char">${character.char}</div>
+                    <div class="pinyin">${character.pinyin}</div>
+                `;
+                characterGridEl.appendChild(card);
+            });
+        }
+
+        // Initialize the game when the page loads
+        window.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>
