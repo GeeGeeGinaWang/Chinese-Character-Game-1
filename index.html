@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chinese Character Detective - Learn Chinese Characters</title>
+    <title>Chinese Character Detective - Job Interview</title>
     <style>
         * {
             margin: 0;
@@ -446,6 +446,23 @@
             color: #a0a0c0;
             font-size: 1.2rem;
         }
+        
+        .interview-question {
+            font-size: 1.3rem;
+            color: #f8fafc;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(60, 60, 80, 0.8);
+            border-radius: 8px;
+            border-left: 4px solid #0ea5e9;
+        }
+        
+        .interview-context {
+            font-size: 1rem;
+            color: #a0a0c0;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -455,7 +472,7 @@
     
     <header>
         <h1>Chinese Character Detective</h1>
-        <p class="subtitle">Unlock the mysteries of Chinese characters through interactive stories</p>
+        <p class="subtitle">Pass the interview to join our detective agency</p>
     </header>
     
     <div class="container">
@@ -463,50 +480,56 @@
         <div class="decoration dec-2 floating">字</div>
         <div class="decoration dec-3 floating">学</div>
         
-        <div class="chapter-title">Chapter 1: The Detective Agency</div>
+        <div class="chapter-title">Chapter 1: The Detective Agency Interview</div>
         
         <div class="game-area">
             <div class="story-panel">
                 <div class="npc-image">社</div>
                 <div class="story-content">
                     <p>Welcome to the Chinese Character Detective Agency! I'm Director Li Ming.</p>
-                    <p>Our agency specializes in solving mysteries related to Chinese characters. We've received many cases recently, but we're short on staff.</p>
-                    <p>As a new member, you need to master some basic characters first. Let's start with the simplest ones!</p>
-                    <p><strong>Mission:</strong> Learn 5 basic characters and pass the entry test.</p>
+                    <p>We're looking for new detectives who can solve mysteries using Chinese characters. To join our team, you need to pass this interview.</p>
+                    <p>I'll ask you some questions in Chinese. Try to understand and respond appropriately.</p>
+                    <p><strong>Mission:</strong> Answer all 8 interview questions correctly.</p>
                 </div>
                 
                 <div class="progress-container">
-                    <div>Story Progress</div>
+                    <div>Interview Progress</div>
                     <div class="progress-bar">
                         <div class="progress" id="story-progress"></div>
                     </div>
                     <div class="stats">
                         <div>Chapter: <span id="chapter-num">1</span>/6</div>
-                        <div>Task: <span id="task-progress">1</span>/5</div>
+                        <div>Question: <span id="task-progress">1</span>/8</div>
                     </div>
                 </div>
                 
                 <div class="story-controls">
-                    <button id="prev-btn">Previous Task</button>
-                    <button id="next-btn" class="btn-secondary">Next Task</button>
+                    <button id="prev-btn">Previous Question</button>
+                    <button id="next-btn" class="btn-secondary">Next Question</button>
                 </div>
             </div>
             
             <div class="game-panel">
+                <div class="interview-context" id="interview-context">
+                    Director Li Ming looks at you and says:
+                </div>
+                
+                <div class="interview-question" id="current-question">你好</div>
+                
                 <div class="character-display" id="current-character">你</div>
                 
                 <div class="character-info">
-                    <div class="pinyin" id="pinyin">nǐ</div>
-                    <div class="meaning" id="meaning">You - Second person pronoun</div>
-                    <div class="example" id="example">Example: 你好！(Nǐ hǎo! - Hello!)</div>
+                    <div class="pinyin" id="pinyin">nǐ hǎo</div>
+                    <div class="meaning" id="meaning">Hello - A common Chinese greeting</div>
+                    <div class="example" id="example">Response: 你好！(Nǐ hǎo! - Hello!)</div>
                 </div>
                 
                 <div class="hint">
-                    <strong>Detective Tip:</strong> This character represents the second person, used to address someone. In Chinese, it's the counterpart to "I" (wǒ).
+                    <strong>Interview Tip:</strong> This is a standard Chinese greeting. The director is saying "Hello" to you.
                 </div>
                 
                 <div class="input-area">
-                    <input type="text" id="answer-input" placeholder="Enter the meaning of this character...">
+                    <input type="text" id="answer-input" placeholder="How would you respond to this greeting?">
                     <button id="submit-btn">Submit Answer</button>
                     <div id="result-message"></div>
                 </div>
@@ -522,7 +545,7 @@
                     </div>
                 </div>
                 
-                <h3>Unlocked Characters</h3>
+                <h3>Interview Vocabulary</h3>
                 <div class="character-grid" id="character-grid">
                     <!-- Character cards will be generated dynamically by JavaScript -->
                 </div>
@@ -532,8 +555,8 @@
     
     <div class="celebration" id="celebration">
         <h2>Congratulations!</h2>
-        <p>You've successfully solved this character puzzle!</p>
-        <p>Moving to the next challenge...</p>
+        <p>You've successfully answered this interview question!</p>
+        <p>Moving to the next question...</p>
     </div>
 
     <script>
@@ -565,49 +588,87 @@
             }
         });
         
-        // Story chapters data
-        const storyChapters = [
+        // Interview questions data
+        const interviewQuestions = [
             {
-                title: "Chapter 1: The Detective Agency",
-                npc: "社",
-                story: "Welcome to the Chinese Character Detective Agency! I'm Director Li Ming. Our agency specializes in solving mysteries related to Chinese characters. We've received many cases recently, but we're short on staff. As a new member, you need to master some basic characters first. Let's start with the simplest ones!",
-                task: "Learn 5 basic characters and pass the entry test.",
-                characters: [0, 1, 2, 3, 4] // character indices
+                question: "你好",
+                pinyin: "nǐ hǎo",
+                meaning: "Hello - A common Chinese greeting",
+                example: "Response: 你好！(Nǐ hǎo! - Hello!)",
+                hint: "This is a standard Chinese greeting. The director is saying 'Hello' to you.",
+                correctAnswers: ["你好", "nǐ hǎo", "hello", "hi"],
+                context: "Director Li Ming looks at you and says:",
+                characters: [0, 1] // 你, 好
             },
             {
-                title: "Chapter 2: The Missing Friend",
-                npc: "学",
-                story: "A university student named Xiao Li came to us for help. His friend Xiao Wang disappeared yesterday. Xiao Wang only left a note, but the handwriting is blurry. We need to decipher the characters on the note to find out where Xiao Wang went.",
-                task: "Decipher the note and find Xiao Wang.",
-                characters: [5, 6, 7, 8, 9]
+                question: "你叫什么名字？",
+                pinyin: "nǐ jiào shénme míngzì?",
+                meaning: "What is your name? - Asking for someone's name",
+                example: "Response: 我叫... (Wǒ jiào... - My name is...)",
+                hint: "The director is asking for your name. In Chinese, people often respond with '我叫' followed by their name.",
+                correctAnswers: ["我叫", "wǒ jiào", "my name is"],
+                context: "The director smiles and asks:",
+                characters: [0, 2, 3, 4] // 你, 叫, 什么, 名字
             },
             {
-                title: "Chapter 3: The Mysterious Gift",
-                npc: "礼",
-                story: "Today is Mary's birthday, and she received an anonymous gift. The gift box has a series of character puzzles. Only by solving the puzzles can she find out who sent the gift. Mary really wants to know who sent it. Can you help her?",
-                task: "Solve the character puzzles on the gift.",
-                characters: [10, 11, 12, 13, 14]
+                question: "你是哪国人？",
+                pinyin: "nǐ shì nǎ guó rén?",
+                meaning: "Which country are you from? - Asking about nationality",
+                example: "Response: 我是美国人。(Wǒ shì Měiguó rén. - I am American.)",
+                hint: "The director wants to know your nationality. In Chinese, you can respond with '我是' followed by your country and '人'.",
+                correctAnswers: ["我是", "wǒ shì", "i am from", "i'm from"],
+                context: "The director looks curious and asks:",
+                characters: [0, 4, 5] // 你, 是, 人
             },
             {
-                title: "Chapter 4: The Time Puzzle",
-                npc: "时",
-                story: "A foreign tourist is lost at the train station. He needs to catch the 3 PM train, but he can't read the Chinese schedule. We need to help him understand the time-related characters so he can board the train on time.",
-                task: "Help the tourist read the schedule.",
-                characters: [15, 16, 17, 18, 19]
+                question: "你是学生吗？",
+                pinyin: "nǐ shì xuéshēng ma?",
+                meaning: "Are you a student? - Asking if someone is a student",
+                example: "Response: 是，我是学生。(Shì, wǒ shì xuéshēng. - Yes, I am a student.)",
+                hint: "This is a yes/no question. You can respond with '是' for yes or '不是' for no.",
+                correctAnswers: ["是", "shì", "yes", "yes i am", "我是学生", "wǒ shì xuéshēng"],
+                context: "The director checks your background:",
+                characters: [0, 4, 6, 7] // 你, 是, 学, 生
             },
             {
-                title: "Chapter 5: The Family Album",
-                npc: "家",
-                story: "An elderly lady wants to organize her family photo album, but the character labels in the album have faded. She hopes we can help identify these characters to recover precious family memories.",
-                task: "Identify the family member titles in the album.",
-                characters: [20, 21, 22, 23, 24]
+                question: "你家有几口人？",
+                pinyin: "nǐ jiā yǒu jǐ kǒu rén?",
+                meaning: "How many people are in your family? - Asking about family size",
+                example: "Response: 我家有四口人。(Wǒ jiā yǒu sì kǒu rén. - There are four people in my family.)",
+                hint: "The director is asking about your family size. In Chinese, you respond with '我家有' followed by the number and '口人'.",
+                correctAnswers: ["我家有", "wǒ jiā yǒu", "my family has", "there are"],
+                context: "The director asks about your family:",
+                characters: [0, 8, 9, 5] // 你, 家, 有, 人
             },
             {
-                title: "Chapter 6: The Final Challenge",
-                npc: "侦",
-                story: "Congratulations! You've mastered a lot of Chinese character knowledge. Now, the Director will give you the final test. Pass this test, and you'll become an official member of the Chinese Character Detective Agency!",
-                task: "Pass the final test and become an official detective.",
-                characters: [25, 26, 27, 28, 29]
+                question: "你有兄弟姐妹吗？",
+                pinyin: "nǐ yǒu xiōngdì jiěmèi ma?",
+                meaning: "Do you have siblings? - Asking about brothers and sisters",
+                example: "Response: 我有哥哥和妹妹。(Wǒ yǒu gēgē hé mèimei. - I have an older brother and a younger sister.)",
+                hint: "This question is about siblings. You can respond with '我有' followed by the siblings you have.",
+                correctAnswers: ["我有", "wǒ yǒu", "i have", "yes i have"],
+                context: "The director wants to know about your siblings:",
+                characters: [0, 9, 10, 11, 12, 13] // 你, 有, 兄, 弟, 姐, 妹
+            },
+            {
+                question: "你爸爸做什么工作？",
+                pinyin: "nǐ bàba zuò shénme gōngzuò?",
+                meaning: "What does your father do? - Asking about father's occupation",
+                example: "Response: 我爸爸是老师。(Wǒ bàba shì lǎoshī. - My father is a teacher.)",
+                hint: "The director is asking about your father's job. You can respond with '我爸爸是' followed by the occupation.",
+                correctAnswers: ["我爸爸是", "wǒ bàba shì", "my father is", "my dad is"],
+                context: "The director asks about your family:",
+                characters: [0, 14, 15, 16] // 你, 爸爸, 做, 工作
+            },
+            {
+                question: "你说汉语吗？",
+                pinyin: "nǐ shuō Hànyǔ ma?",
+                meaning: "Do you speak Chinese? - Asking about language ability",
+                example: "Response: 我说一点汉语。(Wǒ shuō yīdiǎn Hànyǔ. - I speak a little Chinese.)",
+                hint: "The director is checking your Chinese language skills. You can respond with '我说' followed by your ability level.",
+                correctAnswers: ["我说", "wǒ shuō", "i speak", "yes i speak"],
+                context: "The director tests your language skills:",
+                characters: [0, 17, 18, 19] // 你, 说, 汉, 语
             }
         ];
 
@@ -615,34 +676,33 @@
         const characters = [
             { char: '你', pinyin: 'nǐ', meaning: 'You - Second person pronoun', example: 'Example: 你好！(Nǐ hǎo! - Hello!)' },
             { char: '好', pinyin: 'hǎo', meaning: 'Good - Expresses positivity or agreement', example: 'Example: 你好！(Nǐ hǎo! - Hello!)' },
-            { char: '我', pinyin: 'wǒ', meaning: 'I/Me - First person pronoun', example: 'Example: 我叫小明。(Wǒ jiào Xiǎomíng. - My name is Xiaoming.)' },
             { char: '叫', pinyin: 'jiào', meaning: 'To call - Used for naming or addressing', example: 'Example: 你叫什么名字？(Nǐ jiào shénme míngzì? - What is your name?)' },
+            { char: '什么', pinyin: 'shénme', meaning: 'What - Question word', example: 'Example: 这是什么？(Zhè shì shénme? - What is this?)' },
+            { char: '名字', pinyin: 'míngzì', meaning: 'Name - Personal name', example: 'Example: 你叫什么名字？(Nǐ jiào shénme míngzì? - What is your name?)' },
             { char: '是', pinyin: 'shì', meaning: 'To be - Expresses affirmation or confirmation', example: 'Example: 我是学生。(Wǒ shì xuéshēng. - I am a student.)' },
+            { char: '学', pinyin: 'xué', meaning: 'To learn - Study', example: 'Example: 学习 (xuéxí - to study)' },
+            { char: '生', pinyin: 'shēng', meaning: 'Life/Student - Life or student', example: 'Example: 学生 (xuéshēng - student)' },
+            { char: '家', pinyin: 'jiā', meaning: 'Home/Family - Home or family', example: 'Example: 我家 (wǒ jiā - my home)' },
+            { char: '有', pinyin: 'yǒu', meaning: 'To have - Possess or exist', example: 'Example: 我有书。(Wǒ yǒu shū. - I have a book.)' },
+            { char: '哥', pinyin: 'gē', meaning: 'Older brother - Elder brother', example: 'Example: 哥哥 (gēgē - older brother)' },
+            { char: '弟', pinyin: 'dì', meaning: 'Younger brother - Little brother', example: 'Example: 弟弟 (dìdi - younger brother)' },
+            { char: '姐', pinyin: 'jiě', meaning: 'Older sister - Elder sister', example: 'Example: 姐姐 (jiějie - older sister)' },
+            { char: '妹', pinyin: 'mèi', meaning: 'Younger sister - Little sister', example: 'Example: 妹妹 (mèimei - younger sister)' },
+            { char: '爸爸', pinyin: 'bàba', meaning: 'Dad - Father', example: 'Example: 我爸爸 (wǒ bàba - my dad)' },
+            { char: '做', pinyin: 'zuò', meaning: 'To do - Perform an action', example: 'Example: 做什么？(Zuò shénme? - Do what?)' },
+            { char: '工作', pinyin: 'gōngzuò', meaning: 'Work - Job or occupation', example: 'Example: 工作 (gōngzuò - work)' },
+            { char: '说', pinyin: 'shuō', meaning: 'To speak - Talk or say', example: 'Example: 说话 (shuōhuà - to speak)' },
+            { char: '汉', pinyin: 'hàn', meaning: 'Han - Chinese ethnicity', example: 'Example: 汉语 (Hànyǔ - Chinese language)' },
+            { char: '语', pinyin: 'yǔ', meaning: 'Language - Speech or language', example: 'Example: 汉语 (Hànyǔ - Chinese language)' },
+            { char: '我', pinyin: 'wǒ', meaning: 'I/Me - First person pronoun', example: 'Example: 我叫小明。(Wǒ jiào Xiǎomíng. - My name is Xiaoming.)' },
             { char: '人', pinyin: 'rén', meaning: 'Person - Human being', example: 'Example: 中国人 (Zhōngguó rén - Chinese person)' },
-            { char: '他', pinyin: 'tā', meaning: 'He - Third person masculine', example: 'Example: 他是老师。(Tā shì lǎoshī. - He is a teacher.)' },
-            { char: '她', pinyin: 'tā', meaning: 'She - Third person feminine', example: 'Example: 她是学生。(Tā shì xuéshēng. - She is a student.)' },
-            { char: '们', pinyin: 'men', meaning: 'Plural marker - Indicates plurality', example: 'Example: 我们 (wǒmen - we)' },
             { char: '老师', pinyin: 'lǎoshī', meaning: 'Teacher - Educator', example: 'Example: 张老师 (Zhāng lǎoshī - Teacher Zhang)' },
             { char: '生日', pinyin: 'shēngrì', meaning: 'Birthday - Date of birth', example: 'Example: 生日快乐！(Shēngrì kuàilè! - Happy birthday!)' },
             { char: '快乐', pinyin: 'kuàilè', meaning: 'Happy - Joyful, pleased', example: 'Example: 生日快乐！(Shēngrì kuàilè! - Happy birthday!)' },
             { char: '礼物', pinyin: 'lǐwù', meaning: 'Gift - Present', example: 'Example: 这是给你的礼物。(Zhè shì gěi nǐ de lǐwù. - This is a gift for you.)' },
             { char: '谢谢', pinyin: 'xièxie', meaning: 'Thank you - Expression of gratitude', example: 'Example: 谢谢你的礼物。(Xièxie nǐ de lǐwù. - Thank you for your gift.)' },
             { char: '送', pinyin: 'sòng', meaning: 'To give - To present', example: 'Example: 我送你礼物。(Wǒ sòng nǐ lǐwù. - I give you a gift.)' },
-            { char: '月', pinyin: 'yuè', meaning: 'Month - Calendar month', example: 'Example: 一月 (yī yuè - January)' },
-            { char: '号', pinyin: 'hào', meaning: 'Date - Day of the month', example: 'Example: 五月一号 (wǔ yuè yī hào - May 1st)' },
-            { char: '星期', pinyin: 'xīngqī', meaning: 'Week - Seven-day period', example: 'Example: 星期一 (xīngqī yī - Monday)' },
-            { char: '点', pinyin: 'diǎn', meaning: "O'clock - Hour of the day", example: 'Example: 三点 (sān diǎn - 3 o clock)' },
-            { char: '分', pinyin: 'fēn', meaning: 'Minute - Unit of time', example: 'Example: 三点十分 (sān diǎn shí fēn - 3:10)' },
-            { char: '爸爸', pinyin: 'bàba', meaning: 'Dad - Father', example: 'Example: 我爸爸 (wǒ bàba - my dad)' },
-            { char: '妈妈', pinyin: 'māma', meaning: 'Mom - Mother', example: 'Example: 我妈妈 (wǒ māma - my mom)' },
-            { char: '哥哥', pinyin: 'gēge', meaning: 'Older brother - Elder brother', example: 'Example: 我哥哥 (wǒ gēge - my older brother)' },
-            { char: '姐姐', pinyin: 'jiějie', meaning: 'Older sister - Elder sister', example: 'Example: 我姐姐 (wǒ jiějie - my older sister)' },
-            { char: '弟弟', pinyin: 'dìdi', meaning: 'Younger brother - Little brother', example: 'Example: 我弟弟 (wǒ dìdi - my younger brother)' },
-            { char: '学习', pinyin: 'xuéxí', meaning: 'To study - To learn', example: 'Example: 学习汉语 (xuéxí Hànyǔ - study Chinese)' },
-            { char: '汉语', pinyin: 'Hànyǔ', meaning: 'Chinese language - Mandarin', example: 'Example: 学习汉语 (xuéxí Hànyǔ - study Chinese)' },
-            { char: '朋友', pinyin: 'péngyǒu', meaning: 'Friend - Companion', example: 'Example: 好朋友 (hǎo péngyǒu - good friend)' },
-            { char: '名字', pinyin: 'míngzì', meaning: 'Name - Personal name', example: 'Example: 你叫什么名字？(Nǐ jiào shénme míngzì? - What is your name?)' },
-            { char: '今天', pinyin: 'jīntiān', meaning: 'Today - This day', example: 'Example: 今天很好。(Jīntiān hěn hǎo. - Today is very good.)' }
+            { char: '月', pinyin: 'yuè', meaning: 'Month - Calendar month', example: 'Example: 一月 (yī yuè - January)' }
         ];
 
         // Game state
@@ -656,6 +716,8 @@
         const chapterTitleEl = document.querySelector('.chapter-title');
         const npcImageEl = document.querySelector('.npc-image');
         const storyContentEl = document.querySelector('.story-content');
+        const interviewContextEl = document.getElementById('interview-context');
+        const currentQuestionEl = document.getElementById('current-question');
         const currentCharacterEl = document.getElementById('current-character');
         const pinyinEl = document.getElementById('pinyin');
         const meaningEl = document.getElementById('meaning');
@@ -704,13 +766,14 @@
 
         // Display current chapter
         function displayChapter(chapterIndex) {
-            const chapter = storyChapters[chapterIndex];
-            chapterTitleEl.textContent = chapter.title;
-            npcImageEl.textContent = chapter.npc;
+            chapterTitleEl.textContent = "Chapter 1: The Detective Agency Interview";
+            npcImageEl.textContent = "社";
             
             // Update story content
-            let storyHTML = `<p>${chapter.story}</p>`;
-            storyHTML += `<p><strong>Mission:</strong> ${chapter.task}</p>`;
+            let storyHTML = `<p>Welcome to the Chinese Character Detective Agency! I'm Director Li Ming.</p>`;
+            storyHTML += `<p>We're looking for new detectives who can solve mysteries using Chinese characters. To join our team, you need to pass this interview.</p>`;
+            storyHTML += `<p>I'll ask you some questions in Chinese. Try to understand and respond appropriately.</p>`;
+            storyHTML += `<p><strong>Mission:</strong> Answer all 8 interview questions correctly.</p>`;
             storyContentEl.innerHTML = storyHTML;
             
             // Update chapter info
@@ -719,15 +782,23 @@
 
         // Display current task
         function displayTask(taskIndex) {
-            const chapter = storyChapters[currentChapter];
-            if (taskIndex >= 0 && taskIndex < chapter.characters.length) {
-                const characterIndex = chapter.characters[taskIndex];
-                const character = characters[characterIndex];
+            if (taskIndex >= 0 && taskIndex < interviewQuestions.length) {
+                const question = interviewQuestions[taskIndex];
                 
-                currentCharacterEl.textContent = character.char;
-                pinyinEl.textContent = character.pinyin;
-                meaningEl.textContent = character.meaning;
-                exampleEl.textContent = character.example;
+                // Update question and context
+                currentQuestionEl.textContent = question.question;
+                interviewContextEl.textContent = question.context;
+                
+                // Update character display (show first character of the question)
+                currentCharacterEl.textContent = question.question.charAt(0);
+                
+                // Update character info
+                pinyinEl.textContent = question.pinyin;
+                meaningEl.textContent = question.meaning;
+                exampleEl.textContent = question.example;
+                
+                // Update hint
+                document.querySelector('.hint').innerHTML = `<strong>Interview Tip:</strong> ${question.hint}`;
                 
                 // Update task progress
                 taskProgressEl.textContent = taskIndex + 1;
@@ -739,92 +810,20 @@
                 
                 // Focus on input
                 answerInputEl.focus();
+                
+                // Add characters to learned list
+                question.characters.forEach(charIndex => {
+                    if (!learnedCharacters.includes(charIndex)) {
+                        learnedCharacters.push(charIndex);
+                    }
+                });
             }
         }
 
         // Check answer
         function checkAnswer() {
             const userAnswer = answerInputEl.value.trim().toLowerCase();
-            const chapter = storyChapters[currentChapter];
-            const characterIndex = chapter.characters[currentTask];
-            const character = characters[characterIndex];
+            const question = interviewQuestions[currentTask];
             
-            // Simple answer validation
-            const correctMeaning = character.meaning.toLowerCase();
-            let isCorrect = false;
-            
-            // Check if answer contains keywords
-            if (correctMeaning.includes('you') && userAnswer.includes('you')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('good') && userAnswer.includes('good')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('i/me') && (userAnswer.includes('i') || userAnswer.includes('me'))) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('to call') && userAnswer.includes('call')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('to be') && userAnswer.includes('be')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('person') && userAnswer.includes('person')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('he') && userAnswer.includes('he')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('she') && userAnswer.includes('she')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('plural') && userAnswer.includes('plural')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('teacher') && userAnswer.includes('teacher')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('birthday') && userAnswer.includes('birthday')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('happy') && userAnswer.includes('happy')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('gift') && userAnswer.includes('gift')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('thank') && userAnswer.includes('thank')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('to give') && userAnswer.includes('give')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('month') && userAnswer.includes('month')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('date') && userAnswer.includes('date')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('week') && userAnswer.includes('week')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes("o'clock") && (userAnswer.includes('clock') || userAnswer.includes('hour'))) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('minute') && userAnswer.includes('minute')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('dad') && userAnswer.includes('dad')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('mom') && userAnswer.includes('mom')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('older brother') && (userAnswer.includes('brother') || userAnswer.includes('older'))) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('older sister') && (userAnswer.includes('sister') || userAnswer.includes('older'))) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('younger brother') && (userAnswer.includes('brother') || userAnswer.includes('younger'))) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('to study') && (userAnswer.includes('study') || userAnswer.includes('learn'))) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('chinese') && userAnswer.includes('chinese')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('friend') && userAnswer.includes('friend')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('name') && userAnswer.includes('name')) {
-                isCorrect = true;
-            } else if (correctMeaning.includes('today') && userAnswer.includes('today')) {
-                isCorrect = true;
-            }
-            
-            totalAttempts++;
-            if (isCorrect) {
-                correctAnswers++;
-                resultMessageEl.textContent = 'Correct! Excellent work, Detective!';
-                resultMessageEl.className = 'success';
-                
-                // Add to learned list (if not already there)
-                if (!learnedCharacters.includes(characterIndex)) {
-                    learnedCharacters.push(characterIndex);
-                }
-                
-                // Show celebration and automatically
+            // Check if answer is correct
+            let is
