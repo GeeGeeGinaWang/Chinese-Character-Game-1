@@ -302,41 +302,6 @@
             color: #fcd34d;
         }
         
-        .character-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .character-card {
-            background: rgba(50, 50, 70, 0.8);
-            border-radius: 8px;
-            padding: 15px 5px;
-            text-align: center;
-            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: 1px solid #4a4a6a;
-        }
-        
-        .character-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
-            border-color: #6366f1;
-        }
-        
-        .character-card .char {
-            font-size: 1.8rem;
-            margin-bottom: 5px;
-            color: #f8fafc;
-        }
-        
-        .character-card .pinyin {
-            font-size: 0.8rem;
-            color: #f59e0b;
-        }
-        
         .success {
             color: #10b981;
             font-weight: bold;
@@ -525,23 +490,8 @@
                 flex-direction: column;
             }
             
-            .character-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            
             .chapters-grid {
                 grid-template-columns: 1fr;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .character-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .character-display {
-                font-size: 100px;
-                height: 150px;
             }
         }
     </style>
@@ -583,7 +533,7 @@
                         <p>Welcome to the Chinese Character Detective Agency! I'm Director Li Ming.</p>
                         <p>We're looking for new detectives who can solve mysteries using Chinese characters. To join our team, you need to pass this interview.</p>
                         <p>I'll ask you some questions in Chinese. Try to understand and respond appropriately.</p>
-                        <p><strong>Mission:</strong> Answer all 8 interview questions correctly.</p>
+                        <p><strong>Mission:</strong> Answer all interview questions correctly.</p>
                     </div>
                     
                     <div class="progress-container">
@@ -593,7 +543,7 @@
                         </div>
                         <div class="stats">
                             <div>Chapter: <span id="chapter-num">1</span>/5</div>
-                            <div>Question: <span id="task-progress">1</span>/8</div>
+                            <div>Question: <span id="task-progress">1</span>/<span id="total-tasks">2</span></div>
                         </div>
                     </div>
                     
@@ -621,7 +571,7 @@
                     </div>
                     
                     <div class="hint" id="hint">
-                        <strong>Interview Tip:</strong> This is a standard Chinese greeting. The director is saying "Hello" to you.
+                        <strong>Detective Tip:</strong> This is a standard Chinese greeting. The director is saying "Hello" to you.
                     </div>
                     
                     <div class="input-area">
@@ -639,11 +589,6 @@
                             <div>Learned: <span id="learned-count">1</span>/30</div>
                             <div>Accuracy: <span id="accuracy">100%</span></div>
                         </div>
-                    </div>
-                    
-                    <h3>Chapter Vocabulary</h3>
-                    <div class="character-grid" id="character-grid">
-                        <!-- Character cards will be generated dynamically by JavaScript -->
                     </div>
                 </div>
             </div>
@@ -837,9 +782,9 @@
         const learningProgress = document.getElementById('learning-progress');
         const chapterNum = document.getElementById('chapter-num');
         const taskProgress = document.getElementById('task-progress');
+        const totalTasks = document.getElementById('total-tasks');
         const learnedCount = document.getElementById('learned-count');
         const accuracyEl = document.getElementById('accuracy');
-        const characterGrid = document.getElementById('character-grid');
         const prevBtn = document.getElementById('prev-btn');
         const nextBtn = document.getElementById('next-btn');
         const backToHome = document.getElementById('back-to-home');
@@ -864,7 +809,7 @@
             
             chapters.forEach(chapter => {
                 const isCompleted = gameData.completedChapters.includes(chapter.id);
-                const isLocked = chapter.id > 1 && !gameData.completedChapters.includes(chapter.id - 1);
+                const isLocked = false; // Remove locking for demo - all chapters accessible
                 
                 const chapterCard = document.createElement('div');
                 chapterCard.className = `chapter-card ${isCompleted ? 'completed' : ''} ${isLocked ? 'locked' : ''}`;
@@ -902,6 +847,7 @@
             npcImage.textContent = chapter.npc;
             storyContent.innerHTML = `<p>${chapter.story}</p><p><strong>Mission:</strong> Answer all ${chapter.questions.length} questions correctly.</p>`;
             chapterNum.textContent = chapter.id;
+            totalTasks.textContent = chapter.questions.length;
             
             // Show chapter screen
             homeScreen.classList.add('hidden');
@@ -994,4 +940,60 @@
         }
 
         // Next task
-       
+        function nextTask() {
+            const chapter = chapters.find(c => c.id === gameData.currentChapter);
+            if (!chapter) return;
+            
+            if (currentTask < chapter.questions.length - 1) {
+                currentTask++;
+                displayTask();
+            } else {
+                // All questions completed - show chapter complete celebration
+                showChapterComplete();
+            }
+            
+            updateProgress();
+        }
+
+        // Previous task
+        function prevTask() {
+            if (currentTask > 0) {
+                currentTask--;
+                displayTask();
+            }
+            
+            updateProgress();
+        }
+
+        // Show chapter complete celebration
+        function showChapterComplete() {
+            chapterComplete.classList.add('active');
+            
+            // Mark chapter as completed
+            if (!gameData.completedChapters.includes(gameData.currentChapter)) {
+                gameData.completedChapters.push(gameData.currentChapter);
+                saveProgress();
+            }
+            
+            // Create fireworks effect
+            createFireworks();
+            
+            // Return to home screen after 2 seconds
+            setTimeout(() => {
+                chapterComplete.classList.remove('active');
+                returnToHome();
+            }, 2000);
+        }
+
+        // Create fireworks effect
+        function createFireworks() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            const container = chapterComplete;
+            
+            for (let i = 0; i < 30; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                firework.style.left = Math.random() * 100 + 'vw';
+                firework.style.top = Math.random() * 100 + 'vh';
+                firework.style.setProperty('--x', (Math.random() * 40 - 20) + 'px
