@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chinese Character Detective - Job Interview</title>
+    <title>Chinese Character Detective</title>
     <style>
         * {
             margin: 0;
@@ -60,6 +60,103 @@
             font-size: 1.2rem;
         }
         
+        .home-screen, .chapter-screen {
+            width: 100%;
+        }
+        
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .chapter-card {
+            background: rgba(40, 40, 60, 0.7);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 1px solid #4a4a6a;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chapter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border-color: #6366f1;
+        }
+        
+        .chapter-card.completed::before {
+            content: "✓";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #10b981;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .chapter-card.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .chapter-card.locked::after {
+            content: "🔒";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .chapter-title {
+            font-size: 1.4rem;
+            color: #f8fafc;
+            margin-bottom: 10px;
+        }
+        
+        .chapter-description {
+            color: #a0a0c0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .progress-container {
+            margin: 30px 0;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #a0a0c0;
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background: rgba(40, 40, 60, 0.8);
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #4a4a6a;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            width: 0%;
+            transition: width 0.5s;
+            border-radius: 6px;
+        }
+        
         .game-area {
             display: flex;
             flex-wrap: wrap;
@@ -86,29 +183,6 @@
             padding: 20px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             border: 1px solid #4a4a6a;
-        }
-        
-        .chapter-title {
-            background: linear-gradient(90deg, #0ea5e9, #6366f1);
-            color: white;
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 1.3rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-        
-        .story-content {
-            background: rgba(50, 50, 70, 0.8);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            min-height: 180px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            line-height: 1.6;
-            border-left: 4px solid #6366f1;
         }
         
         .character-display {
@@ -213,25 +287,9 @@
             background: linear-gradient(90deg, #059669, #047857);
         }
         
-        .progress-container {
-            margin: 20px 0;
-        }
-        
-        .progress-bar {
-            height: 12px;
-            background: rgba(40, 40, 60, 0.8);
-            border-radius: 6px;
-            margin: 10px 0;
-            overflow: hidden;
-            border: 1px solid #4a4a6a;
-        }
-        
-        .progress {
-            height: 100%;
-            background: linear-gradient(90deg, #10b981, #059669);
-            width: 30%;
-            transition: width 0.5s;
-            border-radius: 6px;
+        .btn-home {
+            background: linear-gradient(90deg, #8b5cf6, #a855f7);
+            margin-top: 20px;
         }
         
         .hint {
@@ -332,58 +390,21 @@
             flex: 1;
         }
         
-        @media (max-width: 768px) {
-            .game-area {
-                flex-direction: column;
-            }
-            
-            .character-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
+        .interview-question {
+            font-size: 1.3rem;
+            color: #f8fafc;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(60, 60, 80, 0.8);
+            border-radius: 8px;
+            border-left: 4px solid #0ea5e9;
         }
         
-        @media (max-width: 480px) {
-            .character-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .character-display {
-                font-size: 100px;
-                height: 150px;
-            }
-        }
-        
-        .decoration {
-            position: absolute;
-            opacity: 0.05;
-            font-size: 120px;
-            z-index: 0;
-            color: #e6e6e6;
-        }
-        
-        .dec-1 {
-            top: 10%;
-            left: 5%;
-        }
-        
-        .dec-2 {
-            top: 60%;
-            right: 5%;
-        }
-        
-        .dec-3 {
-            bottom: 10%;
-            left: 10%;
-        }
-        
-        .floating {
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+        .interview-context {
+            font-size: 1rem;
+            color: #a0a0c0;
+            margin-bottom: 20px;
+            font-style: italic;
         }
         
         .celebration {
@@ -421,80 +442,6 @@
             text-align: center;
             max-width: 600px;
             margin-bottom: 30px;
-        }
-        
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #f59e0b;
-            opacity: 0.8;
-        }
-        
-        .music-control {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(40, 40, 60, 0.8);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: 1px solid #4a4a6a;
-            z-index: 10;
-        }
-        
-        .music-control i {
-            color: #a0a0c0;
-            font-size: 1.2rem;
-        }
-        
-        .interview-question {
-            font-size: 1.3rem;
-            color: #f8fafc;
-            margin-bottom: 15px;
-            padding: 15px;
-            background: rgba(60, 60, 80, 0.8);
-            border-radius: 8px;
-            border-left: 4px solid #0ea5e9;
-        }
-        
-        .interview-context {
-            font-size: 1rem;
-            color: #a0a0c0;
-            margin-bottom: 20px;
-            font-style: italic;
-        }
-        
-        .firework {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #fff;
-            animation: firework-animation 1.5s ease-out forwards;
-        }
-        
-        @keyframes firework-animation {
-            0% {
-                transform: translate(var(--x), var(--y));
-                width: 5px;
-                height: 5px;
-                opacity: 1;
-            }
-            50% {
-                width: 3px;
-                height: 3px;
-                opacity: 1;
-            }
-            100% {
-                width: 200px;
-                height: 200px;
-                opacity: 0;
-            }
         }
         
         .chapter-complete {
@@ -540,91 +487,164 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
+        
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff;
+            animation: firework-animation 1.5s ease-out forwards;
+        }
+        
+        @keyframes firework-animation {
+            0% {
+                transform: translate(var(--x), var(--y));
+                width: 5px;
+                height: 5px;
+                opacity: 1;
+            }
+            50% {
+                width: 3px;
+                height: 3px;
+                opacity: 1;
+            }
+            100% {
+                width: 200px;
+                height: 200px;
+                opacity: 0;
+            }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .game-area {
+                flex-direction: column;
+            }
+            
+            .character-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .chapters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .character-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .character-display {
+                font-size: 100px;
+                height: 150px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="music-control" id="music-control">
-        <i>♪</i>
-    </div>
-    
-    <header>
-        <h1>Chinese Character Detective</h1>
-        <p class="subtitle">Pass the interview to join our detective agency</p>
-    </header>
-    
     <div class="container">
-        <div class="decoration dec-1 floating">汉</div>
-        <div class="decoration dec-2 floating">字</div>
-        <div class="decoration dec-3 floating">学</div>
-        
-        <div class="chapter-title">Chapter 1: The Detective Agency Interview</div>
-        
-        <div class="game-area">
-            <div class="story-panel">
-                <div class="npc-image">社</div>
-                <div class="story-content">
-                    <p>Welcome to the Chinese Character Detective Agency! I'm Director Li Ming.</p>
-                    <p>We're looking for new detectives who can solve mysteries using Chinese characters. To join our team, you need to pass this interview.</p>
-                    <p>I'll ask you some questions in Chinese. Try to understand and respond appropriately.</p>
-                    <p><strong>Mission:</strong> Answer all 8 interview questions correctly.</p>
+        <!-- Home Screen -->
+        <div class="home-screen" id="home-screen">
+            <header>
+                <h1>Chinese Character Detective</h1>
+                <p class="subtitle">Learn Chinese characters through interactive detective stories</p>
+            </header>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Overall Progress</span>
+                    <span id="overall-progress">0%</span>
                 </div>
-                
-                <div class="progress-container">
-                    <div>Interview Progress</div>
-                    <div class="progress-bar">
-                        <div class="progress" id="story-progress"></div>
-                    </div>
-                    <div class="stats">
-                        <div>Chapter: <span id="chapter-num">1</span>/6</div>
-                        <div>Question: <span id="task-progress">1</span>/8</div>
-                    </div>
-                </div>
-                
-                <div class="story-controls">
-                    <button id="prev-btn">Previous Question</button>
-                    <button id="next-btn" class="btn-secondary">Next Question</button>
+                <div class="progress-bar">
+                    <div class="progress" id="overall-progress-bar"></div>
                 </div>
             </div>
             
-            <div class="game-panel">
-                <div class="interview-context" id="interview-context">
-                    Director Li Ming looks at you and says:
-                </div>
-                
-                <div class="interview-question" id="current-question">你好</div>
-                
-                <div class="character-display" id="current-character">你</div>
-                
-                <div class="character-info">
-                    <div class="pinyin" id="pinyin">nǐ hǎo</div>
-                    <div class="meaning" id="meaning">Hello - A common Chinese greeting</div>
-                    <div class="example" id="example">Response: 你好！(Nǐ hǎo! - Hello!)</div>
-                </div>
-                
-                <div class="hint">
-                    <strong>Interview Tip:</strong> This is a standard Chinese greeting. The director is saying "Hello" to you.
-                </div>
-                
-                <div class="input-area">
-                    <input type="text" id="answer-input" placeholder="How would you respond to this greeting?">
-                    <button id="submit-btn">Submit Answer</button>
-                    <div id="result-message"></div>
-                </div>
-                
-                <div class="progress-container">
-                    <div>Learning Progress</div>
-                    <div class="progress-bar">
-                        <div class="progress" id="learning-progress"></div>
+            <h2 style="margin: 30px 0 20px; text-align: center;">Choose a Chapter</h2>
+            
+            <div class="chapters-grid" id="chapters-grid">
+                <!-- Chapters will be dynamically generated -->
+            </div>
+        </div>
+        
+        <!-- Chapter Screen -->
+        <div class="chapter-screen hidden" id="chapter-screen">
+            <div class="chapter-title" id="chapter-title">Chapter 1: The Detective Agency Interview</div>
+            
+            <div class="game-area">
+                <div class="story-panel">
+                    <div class="npc-image" id="npc-image">社</div>
+                    <div class="story-content" id="story-content">
+                        <p>Welcome to the Chinese Character Detective Agency! I'm Director Li Ming.</p>
+                        <p>We're looking for new detectives who can solve mysteries using Chinese characters. To join our team, you need to pass this interview.</p>
+                        <p>I'll ask you some questions in Chinese. Try to understand and respond appropriately.</p>
+                        <p><strong>Mission:</strong> Answer all 8 interview questions correctly.</p>
                     </div>
-                    <div class="stats">
-                        <div>Learned: <span id="learned-count">1</span>/30</div>
-                        <div>Accuracy: <span id="accuracy">100%</span></div>
+                    
+                    <div class="progress-container">
+                        <div>Chapter Progress</div>
+                        <div class="progress-bar">
+                            <div class="progress" id="story-progress"></div>
+                        </div>
+                        <div class="stats">
+                            <div>Chapter: <span id="chapter-num">1</span>/5</div>
+                            <div>Question: <span id="task-progress">1</span>/8</div>
+                        </div>
                     </div>
+                    
+                    <div class="story-controls">
+                        <button id="prev-btn">Previous Question</button>
+                        <button id="next-btn" class="btn-secondary">Next Question</button>
+                    </div>
+                    
+                    <button id="back-to-home" class="btn-home">Back to Home</button>
                 </div>
                 
-                <h3>Interview Vocabulary</h3>
-                <div class="character-grid" id="character-grid">
-                    <!-- Character cards will be generated dynamically by JavaScript -->
+                <div class="game-panel">
+                    <div class="interview-context" id="interview-context">
+                        Director Li Ming looks at you and says:
+                    </div>
+                    
+                    <div class="interview-question" id="current-question">你好</div>
+                    
+                    <div class="character-display" id="current-character">你</div>
+                    
+                    <div class="character-info">
+                        <div class="pinyin" id="pinyin">nǐ hǎo</div>
+                        <div class="meaning" id="meaning">Hello - A common Chinese greeting</div>
+                        <div class="example" id="example">Response: 你好！(Nǐ hǎo! - Hello!)</div>
+                    </div>
+                    
+                    <div class="hint" id="hint">
+                        <strong>Interview Tip:</strong> This is a standard Chinese greeting. The director is saying "Hello" to you.
+                    </div>
+                    
+                    <div class="input-area">
+                        <input type="text" id="answer-input" placeholder="How would you respond to this greeting?">
+                        <button id="submit-btn">Submit Answer</button>
+                        <div id="result-message"></div>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div>Learning Progress</div>
+                        <div class="progress-bar">
+                            <div class="progress" id="learning-progress"></div>
+                        </div>
+                        <div class="stats">
+                            <div>Learned: <span id="learned-count">1</span>/30</div>
+                            <div>Accuracy: <span id="accuracy">100%</span></div>
+                        </div>
+                    </div>
+                    
+                    <h3>Chapter Vocabulary</h3>
+                    <div class="character-grid" id="character-grid">
+                        <!-- Character cards will be generated dynamically by JavaScript -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -637,187 +657,303 @@
     
     <div class="chapter-complete" id="chapter-complete">
         <h2>Congratulations!</h2>
-        <p>You've successfully completed the interview!</p>
-        <p>Welcome to the Chinese Character Detective Agency!</p>
-        <p>Moving to the next chapter...</p>
+        <p>You've successfully completed this chapter!</p>
+        <p>Returning to the home screen...</p>
     </div>
 
     <script>
-        // Interview questions data
-        const interviewQuestions = [
+        // Game data
+        const gameData = {
+            completedChapters: [],
+            currentChapter: null,
+            progress: 0
+        };
+
+        // Chapters data
+        const chapters = [
             {
-                question: "你好",
-                pinyin: "nǐ hǎo",
-                meaning: "Hello - A common Chinese greeting",
-                example: "Response: 你好！(Nǐ hǎo! - Hello!)",
-                hint: "This is a standard Chinese greeting. The director is saying 'Hello' to you.",
-                correctAnswers: ["你好", "nǐ hǎo", "hello", "hi"],
-                context: "Director Li Ming looks at you and says:",
-                characters: [0, 1] // 你, 好
+                id: 1,
+                title: "The Detective Agency Interview",
+                description: "Join the detective agency by passing an interview in Chinese. Answer questions about yourself to prove your skills.",
+                npc: "社",
+                questions: [
+                    {
+                        question: "你好",
+                        pinyin: "nǐ hǎo",
+                        meaning: "Hello - A common Chinese greeting",
+                        example: "Response: 你好！(Nǐ hǎo! - Hello!)",
+                        hint: "This is a standard Chinese greeting. The director is saying 'Hello' to you.",
+                        correctAnswers: ["你好", "nǐ hǎo", "hello", "hi"],
+                        context: "Director Li Ming looks at you and says:"
+                    },
+                    {
+                        question: "你叫什么名字？",
+                        pinyin: "nǐ jiào shénme míngzì?",
+                        meaning: "What is your name? - Asking for someone's name",
+                        example: "Response: 我叫... (Wǒ jiào... - My name is...)",
+                        hint: "The director is asking for your name. In Chinese, people often respond with '我叫' followed by their name.",
+                        correctAnswers: ["我叫", "wǒ jiào", "my name is"],
+                        context: "The director smiles and asks:"
+                    }
+                ],
+                story: "Welcome to the Chinese Character Detective Agency! I'm Director Li Ming. We're looking for new detectives who can solve mysteries using Chinese characters. To join our team, you need to pass this interview. I'll ask you some questions in Chinese. Try to understand and respond appropriately."
             },
             {
-                question: "你叫什么名字？",
-                pinyin: "nǐ jiào shénme míngzì?",
-                meaning: "What is your name? - Asking for someone's name",
-                example: "Response: 我叫... (Wǒ jiào... - My name is...)",
-                hint: "The director is asking for your name. In Chinese, people often respond with '我叫' followed by their name.",
-                correctAnswers: ["我叫", "wǒ jiào", "my name is"],
-                context: "The director smiles and asks:",
-                characters: [0, 2, 3, 4] // 你, 叫, 什么, 名字
+                id: 2,
+                title: "The Mystery Gift",
+                description: "Help a friend decipher a mysterious gift message written in Chinese characters.",
+                npc: "礼",
+                questions: [
+                    {
+                        question: "这是给你的礼物",
+                        pinyin: "zhè shì gěi nǐ de lǐwù",
+                        meaning: "This is a gift for you",
+                        example: "Response: 谢谢！(Xièxie! - Thank you!)",
+                        hint: "This sentence tells you that something is a gift for you.",
+                        correctAnswers: ["谢谢", "xièxie", "thank you"],
+                        context: "Your friend hands you a gift and says:"
+                    },
+                    {
+                        question: "你喜欢吗？",
+                        pinyin: "nǐ xǐhuān ma?",
+                        meaning: "Do you like it? - Asking if someone likes something",
+                        example: "Response: 喜欢！(Xǐhuān! - I like it!)",
+                        hint: "Your friend is asking if you like the gift.",
+                        correctAnswers: ["喜欢", "xǐhuān", "i like it", "yes"],
+                        context: "Your friend asks:"
+                    }
+                ],
+                story: "Your friend has received a mysterious gift with a note written in Chinese. They need your help to understand the message and respond appropriately. Use your detective skills to decipher the characters!"
             },
             {
-                question: "你是哪国人？",
-                pinyin: "nǐ shì nǎ guó rén?",
-                meaning: "Which country are you from? - Asking about nationality",
-                example: "Response: 我是美国人。(Wǒ shì Měiguó rén. - I am American.)",
-                hint: "The director wants to know your nationality. In Chinese, you can respond with '我是' followed by your country and '人'.",
-                correctAnswers: ["我是", "wǒ shì", "i am from", "i'm from"],
-                context: "The director looks curious and asks:",
-                characters: [0, 4, 5] // 你, 是, 人
+                id: 3,
+                title: "The Time Puzzle",
+                description: "Solve a time-related mystery by understanding Chinese time expressions.",
+                npc: "时",
+                questions: [
+                    {
+                        question: "现在几点？",
+                        pinyin: "xiànzài jǐ diǎn?",
+                        meaning: "What time is it now? - Asking for the current time",
+                        example: "Response: 现在三点。(Xiànzài sān diǎn. - It's three o'clock now.)",
+                        hint: "This question is asking for the current time.",
+                        correctAnswers: ["现在", "xiànzài", "it is", "it's"],
+                        context: "Someone asks you:"
+                    },
+                    {
+                        question: "你几点起床？",
+                        pinyin: "nǐ jǐ diǎn qǐchuáng?",
+                        meaning: "What time do you get up? - Asking about waking up time",
+                        example: "Response: 我七点起床。(Wǒ qī diǎn qǐchuáng. - I get up at seven.)",
+                        hint: "This question is about your waking up schedule.",
+                        correctAnswers: ["我", "wǒ", "i get up at", "at"],
+                        context: "A curious friend asks:"
+                    }
+                ],
+                story: "There's been a mix-up with the train schedule, and you need to help sort it out. Understanding Chinese time expressions is crucial to solving this puzzle and making sure everyone catches their trains on time."
             },
             {
-                question: "你是学生吗？",
-                pinyin: "nǐ shì xuéshēng ma?",
-                meaning: "Are you a student? - Asking if someone is a student",
-                example: "Response: 是，我是学生。(Shì, wǒ shì xuéshēng. - Yes, I am a student.)",
-                hint: "This is a yes/no question. You can respond with '是' for yes or '不是' for no.",
-                correctAnswers: ["是", "shì", "yes", "yes i am", "我是学生", "wǒ shì xuéshēng"],
-                context: "The director checks your background:",
-                characters: [0, 4, 6, 7] // 你, 是, 学, 生
+                id: 4,
+                title: "A Family Photo Album",
+                description: "Help identify family members in an old photo album using Chinese kinship terms.",
+                npc: "家",
+                questions: [
+                    {
+                        question: "这是谁？",
+                        pinyin: "zhè shì shéi?",
+                        meaning: "Who is this? - Asking to identify someone",
+                        example: "Response: 这是我爸爸。(Zhè shì wǒ bàba. - This is my father.)",
+                        hint: "This question is asking you to identify a person.",
+                        correctAnswers: ["这是我", "zhè shì wǒ", "this is my"],
+                        context: "Pointing at a photo, someone asks:"
+                    },
+                    {
+                        question: "你有哥哥吗？",
+                        pinyin: "nǐ yǒu gēgē ma?",
+                        meaning: "Do you have an older brother? - Asking about siblings",
+                        example: "Response: 有，我有一个哥哥。(Yǒu, wǒ yǒu yī gè gēgē. - Yes, I have one older brother.)",
+                        hint: "This question is about whether you have an older brother.",
+                        correctAnswers: ["有", "yǒu", "yes i have", "i have"],
+                        context: "Looking at a family photo, someone asks:"
+                    }
+                ],
+                story: "An elderly neighbor needs help identifying people in their family photo album. The labels have faded, and only the Chinese characters remain. Use your knowledge of family terms to help them reconnect with their memories."
             },
             {
-                question: "你家有几口人？",
-                pinyin: "nǐ jiā yǒu jǐ kǒu rén?",
-                meaning: "How many people are in your family? - Asking about family size",
-                example: "Response: 我家有四口人。(Wǒ jiā yǒu sì kǒu rén. - There are four people in my family.)",
-                hint: "The director is asking about your family size. In Chinese, you respond with '我家有' followed by the number and '口人'.",
-                correctAnswers: ["我家有", "wǒ jiā yǒu", "my family has", "there are"],
-                context: "The director asks about your family:",
-                characters: [0, 8, 9, 5] // 你, 家, 有, 人
-            },
-            {
-                question: "你有兄弟姐妹吗？",
-                pinyin: "nǐ yǒu xiōngdì jiěmèi ma?",
-                meaning: "Do you have siblings? - Asking about brothers and sisters",
-                example: "Response: 我有哥哥和妹妹。(Wǒ yǒu gēgē hé mèimei. - I have an older brother and a younger sister.)",
-                hint: "This question is about siblings. You can respond with '我有' followed by the siblings you have.",
-                correctAnswers: ["我有", "wǒ yǒu", "i have", "yes i have"],
-                context: "The director wants to know about your siblings:",
-                characters: [0, 9, 10, 11, 12, 13] // 你, 有, 兄, 弟, 姐, 妹
-            },
-            {
-                question: "你爸爸做什么工作？",
-                pinyin: "nǐ bàba zuò shénme gōngzuò?",
-                meaning: "What does your father do? - Asking about father's occupation",
-                example: "Response: 我爸爸是老师。(Wǒ bàba shì lǎoshī. - My father is a teacher.)",
-                hint: "The director is asking about your father's job. You can respond with '我爸爸是' followed by the occupation.",
-                correctAnswers: ["我爸爸是", "wǒ bàba shì", "my father is", "my dad is"],
-                context: "The director asks about your family:",
-                characters: [0, 14, 15, 16] // 你, 爸爸, 做, 工作
-            },
-            {
-                question: "你说汉语吗？",
-                pinyin: "nǐ shuō Hànyǔ ma?",
-                meaning: "Do you speak Chinese? - Asking about language ability",
-                example: "Response: 我说一点汉语。(Wǒ shuō yīdiǎn Hànyǔ. - I speak a little Chinese.)",
-                hint: "The director is checking your Chinese language skills. You can respond with '我说' followed by your ability level.",
-                correctAnswers: ["我说", "wǒ shuō", "i speak", "yes i speak"],
-                context: "The director tests your language skills:",
-                characters: [0, 17, 18, 19] // 你, 说, 汉, 语
+                id: 5,
+                title: "The Ultimate Challenge",
+                description: "Put all your skills to the test in this final challenge combining everything you've learned.",
+                npc: "侦",
+                questions: [
+                    {
+                        question: "你会说汉语吗？",
+                        pinyin: "nǐ huì shuō Hànyǔ ma?",
+                        meaning: "Can you speak Chinese? - Asking about language ability",
+                        example: "Response: 我会说一点汉语。(Wǒ huì shuō yīdiǎn Hànyǔ. - I can speak a little Chinese.)",
+                        hint: "This question is about your Chinese language ability.",
+                        correctAnswers: ["我会说", "wǒ huì shuō", "i can speak"],
+                        context: "The final test begins with this question:"
+                    },
+                    {
+                        question: "你喜欢学习汉语吗？",
+                        pinyin: "nǐ xǐhuān xuéxí Hànyǔ ma?",
+                        meaning: "Do you like learning Chinese? - Asking about language learning preference",
+                        example: "Response: 喜欢，汉语很有意思！(Xǐhuān, Hànyǔ hěn yǒuyìsi! - Yes, Chinese is very interesting!)",
+                        hint: "This question is about your enjoyment of learning Chinese.",
+                        correctAnswers: ["喜欢", "xǐhuān", "yes i like", "i like"],
+                        context: "The examiner continues:"
+                    }
+                ],
+                story: "This is it - the final test of your Chinese detective skills! You'll need to use everything you've learned to solve this ultimate challenge. Show them what you're made of!"
             }
         ];
 
-        // Game state
+        // Game state for current chapter
         let currentTask = 0;
         let learnedCharacters = [];
         let correctAnswers = 0;
         let totalAttempts = 0;
 
         // DOM elements
-        const interviewContextEl = document.getElementById('interview-context');
-        const currentQuestionEl = document.getElementById('current-question');
-        const currentCharacterEl = document.getElementById('current-character');
+        const homeScreen = document.getElementById('home-screen');
+        const chapterScreen = document.getElementById('chapter-screen');
+        const chaptersGrid = document.getElementById('chapters-grid');
+        const overallProgress = document.getElementById('overall-progress');
+        const overallProgressBar = document.getElementById('overall-progress-bar');
+        const chapterTitle = document.getElementById('chapter-title');
+        const npcImage = document.getElementById('npc-image');
+        const storyContent = document.getElementById('story-content');
+        const interviewContext = document.getElementById('interview-context');
+        const currentQuestion = document.getElementById('current-question');
+        const currentCharacter = document.getElementById('current-character');
         const pinyinEl = document.getElementById('pinyin');
         const meaningEl = document.getElementById('meaning');
         const exampleEl = document.getElementById('example');
-        const answerInputEl = document.getElementById('answer-input');
+        const hintEl = document.getElementById('hint');
+        const answerInput = document.getElementById('answer-input');
         const submitBtn = document.getElementById('submit-btn');
-        const resultMessageEl = document.getElementById('result-message');
-        const storyProgressEl = document.getElementById('story-progress');
-        const learningProgressEl = document.getElementById('learning-progress');
-        const taskProgressEl = document.getElementById('task-progress');
-        const learnedCountEl = document.getElementById('learned-count');
+        const resultMessage = document.getElementById('result-message');
+        const storyProgress = document.getElementById('story-progress');
+        const learningProgress = document.getElementById('learning-progress');
+        const chapterNum = document.getElementById('chapter-num');
+        const taskProgress = document.getElementById('task-progress');
+        const learnedCount = document.getElementById('learned-count');
         const accuracyEl = document.getElementById('accuracy');
-        const characterGridEl = document.getElementById('character-grid');
+        const characterGrid = document.getElementById('character-grid');
         const prevBtn = document.getElementById('prev-btn');
         const nextBtn = document.getElementById('next-btn');
-        const celebrationEl = document.getElementById('celebration');
-        const chapterCompleteEl = document.getElementById('chapter-complete');
+        const backToHome = document.getElementById('back-to-home');
+        const celebration = document.getElementById('celebration');
+        const chapterComplete = document.getElementById('chapter-complete');
 
         // Initialize game
         function initGame() {
-            displayTask(currentTask);
-            updateProgress();
-            renderCharacterGrid();
+            // Load saved progress
+            const savedProgress = localStorage.getItem('chineseDetectiveProgress');
+            if (savedProgress) {
+                Object.assign(gameData, JSON.parse(savedProgress));
+            }
             
-            // Add event listeners
-            submitBtn.addEventListener('click', checkAnswer);
-            answerInputEl.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    checkAnswer();
+            renderHomeScreen();
+            setupEventListeners();
+        }
+
+        // Render home screen with chapters
+        function renderHomeScreen() {
+            chaptersGrid.innerHTML = '';
+            
+            chapters.forEach(chapter => {
+                const isCompleted = gameData.completedChapters.includes(chapter.id);
+                const isLocked = chapter.id > 1 && !gameData.completedChapters.includes(chapter.id - 1);
+                
+                const chapterCard = document.createElement('div');
+                chapterCard.className = `chapter-card ${isCompleted ? 'completed' : ''} ${isLocked ? 'locked' : ''}`;
+                chapterCard.innerHTML = `
+                    <div class="chapter-title">Chapter ${chapter.id}: ${chapter.title}</div>
+                    <div class="chapter-description">${chapter.description}</div>
+                `;
+                
+                if (!isLocked) {
+                    chapterCard.addEventListener('click', () => startChapter(chapter.id));
                 }
+                
+                chaptersGrid.appendChild(chapterCard);
             });
             
-            prevBtn.addEventListener('click', prevTask);
-            nextBtn.addEventListener('click', nextTask);
+            // Update overall progress
+            const progress = (gameData.completedChapters.length / chapters.length) * 100;
+            overallProgress.textContent = `${Math.round(progress)}%`;
+            overallProgressBar.style.width = `${progress}%`;
+        }
+
+        // Start a chapter
+        function startChapter(chapterId) {
+            gameData.currentChapter = chapterId;
+            currentTask = 0;
+            learnedCharacters = [];
+            correctAnswers = 0;
+            totalAttempts = 0;
+            
+            const chapter = chapters.find(c => c.id === chapterId);
+            if (!chapter) return;
+            
+            // Update UI for chapter
+            chapterTitle.textContent = `Chapter ${chapter.id}: ${chapter.title}`;
+            npcImage.textContent = chapter.npc;
+            storyContent.innerHTML = `<p>${chapter.story}</p><p><strong>Mission:</strong> Answer all ${chapter.questions.length} questions correctly.</p>`;
+            chapterNum.textContent = chapter.id;
+            
+            // Show chapter screen
+            homeScreen.classList.add('hidden');
+            chapterScreen.classList.remove('hidden');
+            
+            // Display first task
+            displayTask();
         }
 
         // Display current task
-        function displayTask(taskIndex) {
-            if (taskIndex >= 0 && taskIndex < interviewQuestions.length) {
-                const question = interviewQuestions[taskIndex];
-                
-                // Update question and context
-                currentQuestionEl.textContent = question.question;
-                interviewContextEl.textContent = question.context;
-                
-                // Update character display (show first character of the question)
-                currentCharacterEl.textContent = question.question.charAt(0);
-                
-                // Update character info
-                pinyinEl.textContent = question.pinyin;
-                meaningEl.textContent = question.meaning;
-                exampleEl.textContent = question.example;
-                
-                // Update hint
-                document.querySelector('.hint').innerHTML = `<strong>Interview Tip:</strong> ${question.hint}`;
-                
-                // Update task progress
-                taskProgressEl.textContent = taskIndex + 1;
-                
-                // Clear input and result
-                answerInputEl.value = '';
-                resultMessageEl.textContent = '';
-                resultMessageEl.className = '';
-                
-                // Focus on input
-                answerInputEl.focus();
-                
-                // Add characters to learned list
-                question.characters.forEach(charIndex => {
-                    if (!learnedCharacters.includes(charIndex)) {
-                        learnedCharacters.push(charIndex);
-                    }
-                });
-                
-                updateProgress();
-            }
+        function displayTask() {
+            const chapter = chapters.find(c => c.id === gameData.currentChapter);
+            if (!chapter || currentTask >= chapter.questions.length) return;
+            
+            const question = chapter.questions[currentTask];
+            
+            // Update question and context
+            currentQuestion.textContent = question.question;
+            interviewContext.textContent = question.context;
+            
+            // Update character display (show first character of the question)
+            currentCharacter.textContent = question.question.charAt(0);
+            
+            // Update character info
+            pinyinEl.textContent = question.pinyin;
+            meaningEl.textContent = question.meaning;
+            exampleEl.textContent = question.example;
+            
+            // Update hint
+            hintEl.innerHTML = `<strong>Detective Tip:</strong> ${question.hint}`;
+            
+            // Update task progress
+            taskProgress.textContent = currentTask + 1;
+            
+            // Clear input and result
+            answerInput.value = '';
+            resultMessage.textContent = '';
+            resultMessage.className = '';
+            
+            // Focus on input
+            answerInput.focus();
+            
+            updateProgress();
         }
 
         // Check answer
         function checkAnswer() {
-            const userAnswer = answerInputEl.value.trim().toLowerCase();
-            const question = interviewQuestions[currentTask];
+            const chapter = chapters.find(c => c.id === gameData.currentChapter);
+            if (!chapter) return;
+            
+            const question = chapter.questions[currentTask];
+            const userAnswer = answerInput.value.trim().toLowerCase();
             
             // Check if answer is correct
             let isCorrect = false;
@@ -831,8 +967,8 @@
             totalAttempts++;
             if (isCorrect) {
                 correctAnswers++;
-                resultMessageEl.textContent = 'Correct! Excellent work, Detective!';
-                resultMessageEl.className = 'success';
+                resultMessage.textContent = 'Correct! Excellent work, Detective!';
+                resultMessage.className = 'success';
                 
                 // Show celebration
                 showCelebration();
@@ -840,8 +976,8 @@
                 // Automatically move to next question after 2 seconds
                 setTimeout(nextTask, 2000);
             } else {
-                resultMessageEl.textContent = 'Try again. Remember the response pattern from the example.';
-                resultMessageEl.className = 'error';
+                resultMessage.textContent = 'Try again. Remember the response pattern from the example.';
+                resultMessage.className = 'error';
             }
             
             updateProgress();
@@ -849,119 +985,13 @@
 
         // Show celebration
         function showCelebration() {
-            celebrationEl.classList.add('active');
+            celebration.classList.add('active');
             
             // Hide celebration after 2 seconds
             setTimeout(() => {
-                celebrationEl.classList.remove('active');
+                celebration.classList.remove('active');
             }, 2000);
         }
 
         // Next task
-        function nextTask() {
-            if (currentTask < interviewQuestions.length - 1) {
-                currentTask++;
-                displayTask(currentTask);
-            } else {
-                // All questions completed - show chapter complete celebration
-                showChapterComplete();
-            }
-            
-            updateProgress();
-        }
-
-        // Previous task
-        function prevTask() {
-            if (currentTask > 0) {
-                currentTask--;
-                displayTask(currentTask);
-            }
-            
-            updateProgress();
-        }
-
-        // Show chapter complete celebration
-        function showChapterComplete() {
-            chapterCompleteEl.classList.add('active');
-            
-            // Create fireworks effect
-            createFireworks();
-            
-            // Move to next chapter after 2 seconds
-            setTimeout(() => {
-                chapterCompleteEl.classList.remove('active');
-                // In a real implementation, you would load the next chapter here
-                alert("Congratulations! You've completed Chapter 1. In the full game, you would now proceed to Chapter 2: The Missing Friend.");
-            }, 2000);
-        }
-
-        // Create fireworks effect
-        function createFireworks() {
-            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
-            const container = chapterCompleteEl;
-            
-            for (let i = 0; i < 50; i++) {
-                const firework = document.createElement('div');
-                firework.className = 'firework';
-                firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                firework.style.left = Math.random() * 100 + 'vw';
-                firework.style.top = Math.random() * 100 + 'vh';
-                firework.style.setProperty('--x', (Math.random() * 40 - 20) + 'px');
-                firework.style.setProperty('--y', (Math.random() * 40 - 20) + 'px');
-                
-                container.appendChild(firework);
-                
-                // Remove firework after animation completes
-                setTimeout(() => {
-                    firework.remove();
-                }, 1500);
-            }
-        }
-
-        // Update progress
-        function updateProgress() {
-            // Story progress
-            const storyProgress = (currentTask / (interviewQuestions.length - 1)) * 100;
-            storyProgressEl.style.width = `${storyProgress}%`;
-            
-            // Learning progress
-            const learningProgress = (learnedCharacters.length / 30) * 100;
-            learningProgressEl.style.width = `${learningProgress}%`;
-            
-            // Update stats
-            learnedCountEl.textContent = learnedCharacters.length;
-            const accuracy = totalAttempts > 0 ? Math.round((correctAnswers / totalAttempts) * 100) : 100;
-            accuracyEl.textContent = `${accuracy}%`;
-            
-            // Re-render character grid
-            renderCharacterGrid();
-        }
-
-        // Render character grid
-        function renderCharacterGrid() {
-            characterGridEl.innerHTML = '';
-            
-            // For now, just show the first few characters as an example
-            const charactersToShow = learnedCharacters.slice(0, 10);
-            
-            charactersToShow.forEach(index => {
-                const character = {
-                    char: interviewQuestions[0].question.charAt(0), // Simplified for demo
-                    pinyin: "nǐ" // Simplified for demo
-                };
-                
-                const card = document.createElement('div');
-                card.className = 'character-card';
-                card.innerHTML = `
-                    <div class="char">${character.char}</div>
-                    <div class="pinyin">${character.pinyin}</div>
-                `;
-                characterGridEl.appendChild(card);
-            });
-        }
-
-        // Initialize the game when the page loads
-        window.addEventListener('DOMContentLoaded', initGame);
-    </script>
-</body>
-</html>
+       
